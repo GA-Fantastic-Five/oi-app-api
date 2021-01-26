@@ -76,8 +76,19 @@ app.use(userRoutes)
 app.use(errorHandler)
 
 // Handle socket.io connections
-io.on('connection', () => {
+io.on('connection', socket => {
   console.log('user has connected')
+
+  // The server is listening and waiting for a user to emit a message event.
+  socket.on('message', message => {
+    // Every time the server receives a message from a connected user, it will
+    // send (emit) that message back to all the connected users.
+    socket.emit('newMessage', message)
+  })
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected')
+  })
 })
 
 // run API on designated port (4741 in this case)
