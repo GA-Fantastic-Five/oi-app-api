@@ -4,7 +4,9 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 
 // Import socket.io packages
+// HTTP server that runs Express & Socket together
 const http = require('http')
+// Importing our socket.io package after doing an 'npm install socket.io'
 const socket = require('socket.io')
 
 // require route files
@@ -38,7 +40,10 @@ mongoose.connect(db, {
 
 // instantiate express application object
 const app = express()
+// createServer is a node.js method that creates an http server which takes app (holds our req and res)
 const server = http.createServer(app)
+// connecting socket.io to HTTP, giving CORS permission, methods: any get or post request sent to our server from origin
+// will be allowed (crud is just for socket server)
 const io = socket(server, {
   cors: {
     origin: 'http://localhost:7165',
@@ -80,12 +85,16 @@ io.on('connection', socket => {
   console.log('user has connected')
 
   // The server is listening and waiting for a user to emit a message event.
+  // .on sets up socket event listener
   socket.on('message', message => {
     // Every time the server receives a message from a connected user, it will
     // send (emit) that message back to all the connected users.
+    // socket.emit will show our messages to all users in our chat room.
+    // socket.emit will send an event 'newMessage' and will send data 'message'.
     socket.emit('newMessage', message)
   })
-
+  // .on sets up socket event listener
+  // disconnect - anytime a user disconnects (handshake is lost), it will trigger event below
   socket.on('disconnect', () => {
     console.log('user disconnected')
   })
