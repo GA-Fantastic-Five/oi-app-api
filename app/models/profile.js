@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const profileSchema = new mongoose.Schema({
-  username: {
+  nickname: {
     type: String,
     required: true
   },
