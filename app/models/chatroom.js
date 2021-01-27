@@ -1,0 +1,21 @@
+const mongoose = require('mongoose')
+
+const chatSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Profile'
+  }
+
+}, {
+  timestamps: true
+})
+
+module.exports = mongoose.model('ChatRoom', chatSchema)
