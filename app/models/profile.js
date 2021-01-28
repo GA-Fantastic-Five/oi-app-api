@@ -3,11 +3,13 @@ const mongoose = require('mongoose')
 const profileSchema = new mongoose.Schema({
   nickname: {
     type: String,
+    unique: true,
     required: true
   },
   avatar: {
     type: String,
-    required: true
+    required: false,
+    default: 'https://sanjivcpa.com/upload/photos/avatar.jpg'
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
