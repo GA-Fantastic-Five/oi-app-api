@@ -89,9 +89,9 @@ io.on('connection', socket => {
   socket.on('message', message => {
     // Every time the server receives a message from a connected user, it will
     // send (emit) that message back to all the connected users.
-    // socket.emit will show our messages to all users in our chat room.
-    // socket.emit will send an event 'newMessage' and will send data 'message'.
-    socket.emit('newMessage', message)
+    // io.emit will show our messages to all users in our chat room.
+    // io.emit will send an event 'newMessage' and will send data 'message'.
+    io.emit('newMessage', message)
   })
   // .on sets up socket event listener
   // disconnect - anytime a user disconnects (handshake is lost), it will trigger event below
