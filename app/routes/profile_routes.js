@@ -2,20 +2,20 @@ const express = require('express')
 // Passport docs: http://www.passportjs.org/docs/
 const passport = require('passport')
 // bcrypt docs: https://github.com/kelektiv/node.bcrypt.js
-const bcrypt = require('bcrypt')
+// const bcrypt = require('bcrypt')
 
 // see above for explanation of "salting", 10 rounds is recommended
-const bcryptSaltRounds = 10
+// const bcryptSaltRounds = 10
 
 // pull in error types and the logic to handle them and set status codes
 const errors = require('../../lib/custom_errors')
 const removeBlanks = require('../../lib/remove_blank_fields')
 
-const BadParamsError = errors.BadParamsError
-const BadCredentialsError = errors.BadCredentialsError
+// const BadParamsError = errors.BadParamsError
+// const BadCredentialsError = errors.BadCredentialsError
 
 const Profile = require('../models/profile')
-const { PromiseProvider } = require('mongoose')
+// const { PromiseProvider } = require('mongoose')
 
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
