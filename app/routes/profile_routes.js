@@ -51,6 +51,26 @@ router.get('/profiles/:nickname', requireToken, (req, res, next) => {
     .catch(next)
 })
 
+router.get('/profile', requireToken, (req, res, next) => {
+  Profile.findOne({ owner: req.user.id })
+    .then(profile => {
+      if (profile) {
+        return profile
+      }
+
+      console.log(req.user)
+      return Profile.create({ nickname: req.user.email, owner: req.user.id })
+    })
+    .then(profile => {
+      // Requiring the user who made the request to own the document
+      // and returning the profile if it exists
+      errors.requireOwnership(req, profile)
+      return profile
+    })
+    .then(profile => res.status(200).json({ profile: profile }))
+    .catch(next)
+})
+
 router.patch('/profile', requireToken, removeBlanks, (req, res, next) => {
   const userProfile = req.body.profile
   Profile.findOne({ owner: req.user.id })
