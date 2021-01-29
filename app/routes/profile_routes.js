@@ -1,6 +1,4 @@
 const express = require('express')
-// jsonwebtoken docs: https://github.com/auth0/node-jsonwebtoken
-const crypto = require('crypto')
 // Passport docs: http://www.passportjs.org/docs/
 const passport = require('passport')
 // bcrypt docs: https://github.com/kelektiv/node.bcrypt.js
@@ -31,6 +29,7 @@ router.post('/profiles', requireToken, (req, res, next) => {
   const id = req.user.id
   const userProfile = req.body.profile
   userProfile.owner = id
+
   Profile.create(req.body.profile)
     .then(profile => res.status(201).json({ profile: profile }))
     .catch(next)
@@ -38,36 +37,50 @@ router.post('/profiles', requireToken, (req, res, next) => {
 
 router.get('/profiles', requireToken, (req, res, next) => {
   Profile.find()
-  .then(profiles => {
-    return profiles.map(profile => profile.toObject())
-  })
-  .then(profiles => res.status(200).json({ profiles: profiles }))
-  .catch(next)
+    .then(profiles => {
+      return profiles.map(profile => profile.toObject())
+    })
+    .then(profiles => res.status(200).json({ profiles: profiles }))
+    .catch(next)
 })
 
 router.get('/profiles/:nickname', requireToken, (req, res, next) => {
   Profile.findOne({ nickname: req.params.nickname })
-  .then(errors.handle404)
-  .then(profile => res.status(200).json({ profile: profile }))
-  .catch(next)
+    .then(errors.handle404)
+    .then(profile => res.status(200).json({ profile: profile }))
+    .catch(next)
 })
 
 router.patch('/profile', requireToken, removeBlanks, (req, res, next) => {
   const userProfile = req.body.profile
   Profile.findOne({ owner: req.user.id })
-  .then(errors.handle404)
-  .then((profile) => {
-    errors.requireOwnership(req, profile)
-    if (userProfile.nickname) {
-      profile.nickname = userProfile.nickname
-    }
-    if (userProfile.avatar) {
-      profile.avatar = userProfile.avatar
-    }
-    return profile.save()
-  })
-  .then(profile => res.status(200).json({ profile: profile }))
-  .catch(next)
+    .then(errors.handle404)
+    .then((profile) => {
+      errors.requireOwnership(req, profile)
+      if (userProfile.nickname) {
+        profile.nickname = userProfile.nickname
+      }
+      if (userProfile.avatar) {
+        profile.avatar = userProfile.avatar
+      }
+      return profile.save()
+    })
+    .then(profile => res.status(200).json({ profile: profile }))
+    .catch(next)
+})
+
+router.delete('/profile', requireToken, (req, res, next) => {
+  Profile.findOne({ owner: req.user.id })
+    .then(errors.handle404)
+    .then(profile => {
+      // Require the user to be the owner of the profile
+      errors.requireOwnership(req, profile)
+
+      // Delete the profile
+      profile.deleteOne()
+    })
+    .then(() => res.sendStatus(204))
+    .catch(next)
 })
 
 module.exports = router
