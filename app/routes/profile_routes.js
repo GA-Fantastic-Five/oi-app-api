@@ -31,7 +31,7 @@ router.post('/profiles', requireToken, (req, res, next) => {
   userProfile.owner = id
 
   Profile.create(req.body.profile)
-    .then(profile => res.status(201).json({ profile: profile }))
+    .then(profile => res.status(201).json({ profile: profile.toObject() }))
     .catch(next)
 })
 
@@ -47,7 +47,7 @@ router.get('/profiles', requireToken, (req, res, next) => {
 router.get('/profiles/:nickname', requireToken, (req, res, next) => {
   Profile.findOne({ nickname: req.params.nickname })
     .then(errors.handle404)
-    .then(profile => res.status(200).json({ profile: profile }))
+    .then(profile => res.status(200).json({ profile: profile.toObject() }))
     .catch(next)
 })
 
@@ -67,7 +67,7 @@ router.get('/profile', requireToken, (req, res, next) => {
       errors.requireOwnership(req, profile)
       return profile
     })
-    .then(profile => res.status(200).json({ profile: profile }))
+    .then(profile => res.status(200).json({ profile: profile.toObject() }))
     .catch(next)
 })
 
@@ -85,7 +85,7 @@ router.patch('/profile', requireToken, removeBlanks, (req, res, next) => {
       }
       return profile.save()
     })
-    .then(profile => res.status(200).json({ profile: profile }))
+    .then(profile => res.status(200).json({ profile: profile.toObject() }))
     .catch(next)
 })
 

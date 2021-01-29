@@ -2,6 +2,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
+const Profile = require('./app/models/profile')
 
 // Import socket.io packages
 // HTTP server that runs Express & Socket together
@@ -82,9 +83,23 @@ app.use(profileRoutes)
 // passed any error messages from them
 app.use(errorHandler)
 
+io.use((socket, next) => {
+  let userId = socket.handshake.query['token']
+  console.log(userId)
+  Profile.findOne({owner: userId})
+    .then(profile => {
+      if (profile) {
+        socket.profile = profile
+        return next()
+      }
+      return next(new Error('authentication error'))
+    })
+    .catch(console.error)
+})
 // Handle socket.io connections
 io.on('connection', socket => {
-  console.log('user has connected')
+  // console.log(`${socket.handshake.query.token} has joined`)
+  console.log(`${socket.profile.nickname} has joined`)
 
   // The server is listening and waiting for a user to emit a message event.
   // .on sets up socket event listener
@@ -94,6 +109,7 @@ io.on('connection', socket => {
     // io.emit will show our messages to all users in our chat room.
     // io.emit will send an event 'newMessage' and will send data 'message'.
     io.emit('newMessage', message)
+    // io.emit('newMessage', { message: message, sender: socket.profile.nickname })
   })
   // .on sets up socket event listener
   // disconnect - anytime a user disconnects (handshake is lost), it will trigger event below
