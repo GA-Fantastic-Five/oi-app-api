@@ -100,7 +100,7 @@ io.use((socket, next) => {
 io.on('connection', socket => {
   // console.log(`${socket.handshake.query.token} has joined`)
   console.log(`${socket.profile.nickname} has joined`)
-
+  // const tempTime = new Date().now()
   // The server is listening and waiting for a user to emit a message event.
   // .on sets up socket event listener
   socket.on('message', message => {
@@ -109,7 +109,7 @@ io.on('connection', socket => {
     // io.emit will show our messages to all users in our chat room.
     // io.emit will send an event 'newMessage' and will send data 'message'.
     // io.emit('newMessage', message)
-    io.emit('newMessage', { message: message, sender: socket.profile.nickname })
+    io.emit('newMessage', { message: message, sender: socket.profile.nickname, time: new Date() })
   })
   // .on sets up socket event listener
   // disconnect - anytime a user disconnects (handshake is lost), it will trigger event below
