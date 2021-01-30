@@ -83,6 +83,9 @@ app.use(profileRoutes)
 // passed any error messages from them
 app.use(errorHandler)
 
+// Create an array to keep track of all conncected users
+let connectedUsers = []
+
 // socket.io middleware to check if the user has a profile
 io.use((socket, next) => {
   let userId = socket.handshake.query['token']
@@ -101,8 +104,18 @@ io.use((socket, next) => {
 
 // Handle socket.io connections
 io.on('connection', socket => {
+  // destructuring profile from socket
+  const { profile } = socket
+
   // console.log(`${socket.handshake.query.token} has joined`)
-  console.log(`${socket.profile.nickname} has joined`)
+  console.log(`${profile.nickname} has joined`)
+
+  // push the new user to the connected users array
+  connectedUsers.push({ nickname: profile.nickname, avatar: profile.avatar, owner: profile.owner })
+
+  // Update user list for every user connected
+  io.emit('user update', connectedUsers)
+  console.log(connectedUsers.find(user => user.owner === profile.owner))
 
   // The server is listening and waiting for a user to emit a message event.
   // .on sets up socket event listener
@@ -118,6 +131,12 @@ io.on('connection', socket => {
   // disconnect - anytime a user disconnects (handshake is lost), it will trigger event below
   socket.on('disconnect', () => {
     console.log('user disconnected')
+
+    connectedUsers = connectedUsers.filter(user => {
+      return user.owner !== profile.owner
+    })
+
+    io.emit('user update', connectedUsers)
   })
 })
 
