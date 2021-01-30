@@ -107,7 +107,7 @@ io.on('connection', socket => {
   // destructuring profile from socket
   const { profile } = socket
 
-  // console.log(`${socket.handshake.query.token} has joined`)
+  // Logging users that join
   console.log(`${profile.nickname} has joined`)
 
   // push the new user to the connected users array
@@ -115,7 +115,6 @@ io.on('connection', socket => {
 
   // Update user list for every user connected
   io.emit('user update', connectedUsers)
-  console.log(connectedUsers.find(user => user.owner === profile.owner))
 
   // The server is listening and waiting for a user to emit a message event.
   // .on sets up socket event listener
