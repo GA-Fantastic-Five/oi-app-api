@@ -1,21 +1,12 @@
 const express = require('express')
 // Passport docs: http://www.passportjs.org/docs/
 const passport = require('passport')
-// bcrypt docs: https://github.com/kelektiv/node.bcrypt.js
-// const bcrypt = require('bcrypt')
-
-// see above for explanation of "salting", 10 rounds is recommended
-// const bcryptSaltRounds = 10
 
 // pull in error types and the logic to handle them and set status codes
 const errors = require('../../lib/custom_errors')
 const removeBlanks = require('../../lib/remove_blank_fields')
 
-// const BadParamsError = errors.BadParamsError
-// const BadCredentialsError = errors.BadCredentialsError
-
 const Profile = require('../models/profile')
-// const { PromiseProvider } = require('mongoose')
 
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
@@ -31,14 +22,14 @@ router.post('/profiles', requireToken, (req, res, next) => {
   userProfile.owner = id
 
   Profile.create(req.body.profile)
-    .then(profile => res.status(201).json({ profile: profile.toObject() }))
+    .then(profile => res.status(201).json({ profile: profile }))
     .catch(next)
 })
 
 router.get('/profiles', requireToken, (req, res, next) => {
   Profile.find()
     .then(profiles => {
-      return profiles.map(profile => profile.toObject())
+      return profiles.map(profile => profile)
     })
     .then(profiles => res.status(200).json({ profiles: profiles }))
     .catch(next)
@@ -47,7 +38,7 @@ router.get('/profiles', requireToken, (req, res, next) => {
 router.get('/profiles/:nickname', requireToken, (req, res, next) => {
   Profile.findOne({ nickname: req.params.nickname })
     .then(errors.handle404)
-    .then(profile => res.status(200).json({ profile: profile.toObject() }))
+    .then(profile => res.status(200).json({ profile: profile }))
     .catch(next)
 })
 
@@ -58,7 +49,6 @@ router.get('/profile', requireToken, (req, res, next) => {
         return profile
       }
 
-      console.log(req.user)
       return Profile.create({ nickname: req.user.email, owner: req.user.id })
     })
     .then(profile => {
@@ -67,12 +57,13 @@ router.get('/profile', requireToken, (req, res, next) => {
       errors.requireOwnership(req, profile)
       return profile
     })
-    .then(profile => res.status(200).json({ profile: profile.toObject() }))
+    .then(profile => res.status(200).json({ profile: profile }))
     .catch(next)
 })
 
 router.patch('/profile', requireToken, removeBlanks, (req, res, next) => {
   const userProfile = req.body.profile
+
   Profile.findOne({ owner: req.user.id })
     .then(errors.handle404)
     .then((profile) => {
@@ -85,7 +76,7 @@ router.patch('/profile', requireToken, removeBlanks, (req, res, next) => {
       }
       return profile.save()
     })
-    .then(profile => res.status(200).json({ profile: profile.toObject() }))
+    .then(profile => res.status(200).json({ profile: profile }))
     .catch(next)
 })
 

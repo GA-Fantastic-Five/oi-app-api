@@ -83,19 +83,22 @@ app.use(profileRoutes)
 // passed any error messages from them
 app.use(errorHandler)
 
+// socket.io middleware to check if the user has a profile
 io.use((socket, next) => {
   let userId = socket.handshake.query['token']
-  console.log(userId)
+
   Profile.findOne({owner: userId})
     .then(profile => {
       if (profile) {
         socket.profile = profile
         return next()
       }
+
       return next(new Error('authentication error'))
     })
     .catch(console.error)
 })
+
 // Handle socket.io connections
 io.on('connection', socket => {
   // console.log(`${socket.handshake.query.token} has joined`)

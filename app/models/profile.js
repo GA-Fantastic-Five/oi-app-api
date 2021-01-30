@@ -18,14 +18,7 @@ const profileSchema = new mongoose.Schema({
     unique: true
   }
 }, {
-  timestamps: true,
-  toObject: {
-    // remove `hashedPassword` field when we call `.toObject`
-    transform: (_doc, profile) => {
-      delete profile.owner
-      return profile
-    }
-  }
+  timestamps: true
 })
 
 module.exports = mongoose.model('Profile', profileSchema)
