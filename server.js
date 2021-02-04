@@ -124,7 +124,7 @@ io.on('connection', socket => {
     // io.emit will show our messages to all users in our chat room.
     // io.emit will send an event 'newMessage' and will send data 'message'.
     // io.emit('newMessage', message)
-    io.emit('newMessage', { message: message, sender: socket.profile.nickname })
+    io.emit('newMessage', { message: message, sender: socket.profile.nickname, avatar: socket.profile.avatar, time: new Date() })
   })
   // .on sets up socket event listener
   // disconnect - anytime a user disconnects (handshake is lost), it will trigger event below
