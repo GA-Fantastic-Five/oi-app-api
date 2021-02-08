@@ -37,5 +37,22 @@ The Oi chat application is a group project where mob and pair programing is used
 - Bcrypt
 - Passport
 
+## Authentication
+| Verb   | URI Pattern            | Controller#Action |
+|:-------|:-----------------------|:------------------|
+| POST   | `/sign-up`             | `users#signup`    |
+| POST   | `/sign-in`             | `users#signin`    |
+| PATCH  | `/change-password`     | `users#changepw`  |
+| DELETE | `/sign-out`            | `users#signout`   |
+## Profile Routes
+| Verb   | URI Pattern           | Controller#Action|
+|:-------|:----------------------|:-----------------|
+| GET    | `/profiles`           | `profiles#index` |
+| GET    | `/profiles/:nickname` | `profiles#show`  |
+| GET    | `/profile/`           | `profile#show`   |
+| POST   | `/profiles`           | `profiles#create`|
+| PATCH  | `/profile/`           | `profile#update` |
+| DELETE | `/profile/`           | `profile#destroy`|
+
 ## WireFrames
 ![ERD](./erd.png)
