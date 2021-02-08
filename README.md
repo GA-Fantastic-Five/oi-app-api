@@ -38,4 +38,4 @@ The Oi chat application is a group project where mob and pair programing is used
 - Passport
 
 ## WireFrames
-![ERD](public/erd.png)
+![ERD](./public/erd.png)
