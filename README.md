@@ -1,5 +1,10 @@
 Oi App - A Chat Application
 
+## Links
+- [Deployed Client] (https://ga-fantastic-five.github.io/oi-app-client/#/)
+- [Client Repo] (https://github.com/GA-Fantastic-Five/oi-app-client)
+- [Deployed API] (https://oi-chat-api.herokuapp.com/)
+
 ## Description:
 The Oi chat application is a group project where mob and pair programing is used to create a simple chat application where the user can chat and interact with others. Working in a group setting and learning new concepts such as socket io and react pushed each individual as a developer and showed each persons strengths. While also developing strategies to be better productive team work by using scrum and agile concepts to plan and discuss the moving parts of our project.
 
