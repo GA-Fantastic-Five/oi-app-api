@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+// Profile model
 const profileSchema = new mongoose.Schema({
   nickname: {
     type: String,

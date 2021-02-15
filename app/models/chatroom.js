@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+// Chatroom model
 const chatSchema = new mongoose.Schema({
   title: {
     type: String,

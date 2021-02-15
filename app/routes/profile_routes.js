@@ -25,7 +25,7 @@ router.post('/profiles', requireToken, (req, res, next) => {
     .then(profile => res.status(201).json({ profile: profile }))
     .catch(next)
 })
-
+// GET request
 router.get('/profiles', requireToken, (req, res, next) => {
   Profile.find()
     .then(profiles => {
